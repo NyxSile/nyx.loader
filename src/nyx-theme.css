@@ -1,0 +1,549 @@
+/* 🌌 nyx.loader Theme — Dark Neon Glassmorphism */
+
+:root {
+  --bg: #0A0A0F;
+  --surface: #12121A;
+  --surface2: #1A1A26;
+  --surface3: #242436;
+  --border: #2A2A3D;
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-hover: rgba(123, 97, 255, 0.45);
+  --border-glow: 0 0 16px rgba(123, 97, 255, 0.25);
+
+  --accent: #7B61FF;
+  --accent-primary: #7B61FF;
+  --accent-secondary: #9B82FF;
+  --accent-cyan: #38BDF8;
+  --accent-pink: #EC4899;
+  --accent-lo: rgba(123, 97, 255, 0.12);
+  --accent-mid: rgba(123, 97, 255, 0.22);
+  --accent-hi: rgba(123, 97, 255, 0.35);
+  --accent-glow: 0 0 20px rgba(123, 97, 255, 0.35);
+
+  --text: #E8E6F0;
+  --text-muted: #8A88A4;
+  --text-dim: #605E7A;
+
+  --ok: #4ADE80;
+  --success: #4ADE80;
+  --warn: #FACC15;
+  --err: #FF6B6B;
+  --danger: #FF6B6B;
+
+  --r: 16px;
+  --r-sm: 10px;
+  --r-pill: 999px;
+
+  --glass-surface: rgba(18, 18, 26, 0.78);
+  --glass-surface-alt: rgba(26, 26, 38, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: #7B61FF;
+}
+
+/* Global scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface3);
+  border-radius: var(--r-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Base Body & Workspace */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+}
+
+.workspace {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at 50% 0%, rgba(123, 97, 255, 0.12) 0%, transparent 55%),
+              radial-gradient(circle at 90% 90%, rgba(56, 189, 248, 0.06) 0%, transparent 45%),
+              #0A0A0F;
+  z-index: 1;
+}
+
+/* Workspace Header */
+.workspace-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.title-block {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 12px;
+  box-shadow: 0 0 16px rgba(123, 97, 255, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 0 24px rgba(123, 97, 255, 0.55);
+}
+
+.title {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff 40%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.title span.accent-dot {
+  color: var(--accent);
+  -webkit-text-fill-color: var(--accent);
+}
+
+.subtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.version-pill {
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--r-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-secondary);
+  background: var(--accent-lo);
+  border: 1px solid var(--border-hover);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.02em;
+  min-width: auto;
+}
+
+.toolbar-button {
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  padding: 0.55rem 1.2rem;
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: auto;
+  transition: all 0.2s ease;
+}
+
+.toolbar-button:hover {
+  background: var(--surface3);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(123, 97, 255, 0.2);
+}
+
+/* Glass Cards & Panels */
+.glass-card,
+.panel {
+  border-radius: var(--r);
+  padding: 1.3rem;
+  background: var(--glass-surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-card:hover,
+.panel:hover {
+  border-color: rgba(123, 97, 255, 0.25);
+}
+
+.card {
+  border-radius: var(--r-sm);
+  padding: 1rem 1.25rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+
+/* Section Labels & Headers */
+.section-label {
+  margin: 0;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+.section-hint {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+/* Form Controls */
+input,
+select,
+textarea {
+  border-radius: var(--r-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  background: var(--surface3);
+  box-shadow: 0 0 0 3px rgba(123, 97, 255, 0.22);
+  outline: none;
+}
+
+select option {
+  color: var(--text);
+  background: var(--surface2);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: var(--r-sm);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: all 0.18s ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--surface3);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(123, 97, 255, 0.18);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px) scale(0.99);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Sidebar List */
+.workspace-list {
+  border-radius: var(--r);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.workspace-list-item {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--text);
+  text-align: left;
+  padding: 0.95rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.workspace-list-item:last-child {
+  border-bottom: none;
+}
+
+.workspace-list-item span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.workspace-list-item:hover {
+  background: var(--accent-lo);
+  color: #fff;
+  border-color: var(--border);
+  transform: none;
+  box-shadow: none;
+}
+
+.workspace-list-item:hover span {
+  color: var(--accent-secondary);
+  border-color: var(--border-hover);
+}
+
+/* Device Card */
+.device-card {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 0.95rem 1.2rem;
+  border-radius: var(--r-sm);
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.device-card:hover {
+  border-color: var(--accent);
+  background: var(--surface3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(123, 97, 255, 0.15);
+}
+
+.device-card.active {
+  border-color: var(--accent) !important;
+  background: var(--accent-lo) !important;
+  box-shadow: 0 0 20px rgba(123, 97, 255, 0.25) !important;
+}
+
+.device-selected-pill {
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--r-pill);
+  background: var(--accent-lo);
+  border: 1px solid var(--accent);
+  color: var(--accent-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Action Buttons inside installer row */
+.action-row button {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0.85rem 1.1rem;
+}
+
+.action-row button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(123, 97, 255, 0.25) 0%, rgba(56, 189, 248, 0.15) 100%);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(123, 97, 255, 0.25);
+}
+
+/* Modals */
+.modal-container {
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  background: rgba(5, 5, 10, 0.7);
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: 24px;
+  border: 1px solid rgba(123, 97, 255, 0.25);
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.85), 0 0 30px rgba(123, 97, 255, 0.15);
+  padding: 2.2em;
+}
+
+.modal-close {
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.modal-close:hover {
+  color: #fff;
+}
+
+/* Operation View / Progress Steps */
+.operation-step {
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.operation-check {
+  color: var(--ok);
+  filter: drop-shadow(0 0 6px rgba(74, 222, 128, 0.4));
+}
+
+.operation-error {
+  color: var(--err);
+  filter: drop-shadow(0 0 6px rgba(255, 107, 107, 0.4));
+}
+
+/* Toasts */
+[data-sonner-toaster] [data-sonner-toast] {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(123, 97, 255, 0.15) !important;
+  border-radius: var(--r-sm) !important;
+}
+
+/* ⚡ Simple Mode (Low-End PC Performance Mode) */
+.workspace.simple-mode {
+  background: #09090e !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.workspace.simple-mode * {
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+.workspace.simple-mode .workspace-header {
+  background: #0f0f17 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid #1f1f2e !important;
+}
+
+.workspace.simple-mode .glass-card,
+.workspace.simple-mode .panel {
+  background: #14141e !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #242436 !important;
+}
+
+.workspace.simple-mode .modal-container {
+  background: rgba(0, 0, 0, 0.82) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.workspace.simple-mode .modal {
+  background: #14141e !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid #2a2a3d !important;
+}
+
+.toolbar-button.simple-mode-btn {
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.toolbar-button.simple-mode-btn.active {
+  background: var(--accent-lo) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent-secondary) !important;
+}
+
+/* Drag-and-Drop IPA Overlay */
+.drag-drop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  pointer-events: none;
+  animation: fadeInOverlay 0.15s ease-out;
+}
+
+.drag-drop-modal {
+  width: 100%;
+  max-width: 460px;
+  padding: 2.2rem 2rem;
+  border-radius: 20px;
+  background: rgba(20, 20, 32, 0.95);
+  border: 2px dashed #7b61ff;
+  box-shadow: 0 0 40px rgba(123, 97, 255, 0.35);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.drag-drop-icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.drag-drop-modal h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.drag-drop-modal p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #94a3b8;
+}
+
+.workspace.simple-mode .drag-drop-overlay {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(10, 10, 15, 0.95) !important;
+}
+
+.workspace.simple-mode .drag-drop-modal {
+  box-shadow: none !important;
+  border: 2px dashed #7b61ff !important;
+  background: #14141e !important;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+

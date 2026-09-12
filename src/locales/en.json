@@ -44,7 +44,10 @@
     "must_be_logged_in": "You must be logged in!",
     "must_select_device": "You must select a device!",
     "ipa_files": "IPA Files",
-    "logo_alt": "iloader logo"
+    "logo_alt": "nyx.loader logo",
+    "drop_ipa_title": "Install IPA File",
+    "drop_ipa_desc": "Drop file to install on {{device}}",
+    "only_ipa_supported": "Only .ipa files are supported"
   },
   "apple_id": {
     "title": "Apple ID",
@@ -75,7 +78,7 @@
     "valid_6digit": "Please enter a valid 6-digit code.",
     "submit": "Submit",
     "max_certs_title": "Maximum certificates reached",
-    "max_certs_desc": "iloader will revoke your existing certificates and generate a new one.",
+    "max_certs_desc": "nyx.loader will revoke your existing certificates and generate a new one.",
     "hide_certificate_list": "Hide certificate list",
     "choose_what_to_revoke": "Choose what to revoke",
     "continue": "Continue",
@@ -93,7 +96,9 @@
     "pairing_in_progress_header": "Pairing with {{device}}...",
     "pairing_in_progress_hint": "Please unlock your device and click \"Trust,\" then enter your passcode if prompted.",
     "pairing_cancel": "Cancel",
-    "failed_select": "Failed to select device"
+    "failed_select": "Failed to select device",
+    "udid_copied_success": "UDID copied to clipboard!",
+    "click_to_copy_udid": "Click to copy UDID"
   },
   "operation": {
     "failed": "Operation failed.",
@@ -161,12 +166,15 @@
     "bundle_id": "Bundle ID",
     "place_pairing_file": "Place Pairing File",
     "place": "Place",
-    "advanced_export_title": "Advanced: Export Pairing File",
-    "advanced_export_message": "This is not recommended unless you know what you're doing. Press \"Place\" next to an app to transfer it automatically instead. Are you sure you still want to export your pairing file?",
+    "save_to_device": "Save to Phone",
+    "saving_to_device": "Saving pairing file to phone...",
+    "saved_to_device_success": "Pairing file saved to phone: {{apps}}!",
+    "advanced_export_title": "Export Pairing File",
+    "advanced_export_message": "Do you want to save a copy of the pairing file to this computer?",
     "exporting_pairing_file": "Exporting pairing file...",
     "pairing_file_exported_success": "Pairing file exported successfully!",
     "failed_export_pairing_file": "Failed to export pairing file",
-    "export_not_recommended": "Export (Not Recommended)",
+    "export_not_recommended": "Export to PC",
     "refresh_installed_apps": "Rescan Installed Apps",
     "place_all": "Place In All Apps"
   },
@@ -197,7 +205,13 @@
     "stored_rppairing_deleted_success": "Stored pairing deleted successfully!",
     "failed_delete_stored_rppairing": "Failed to delete stored pairing",
     "dont_use_keyring": "Don't use keyring",
-    "dont_use_keyring_message": "This makes iloader less secure by storing pairing files, anisette state, and certificates on disk. Enable this only if the default keyring storage doesn't work and you understand the risks."
+    "dont_use_keyring_message": "This makes nyx.loader less secure by storing pairing files, anisette state, and certificates on disk. Enable this only if the default keyring storage doesn't work and you understand the risks.",
+    "simple_mode": "Simple Mode (low-end PCs)",
+    "simple_mode_desc": "Disables background stars animation and intensive blur effects to save CPU/GPU resources on older computers.",
+    "copy_diagnostic_logs": "Copy Diagnostic Log",
+    "diagnostic_logs_copied": "Diagnostic log copied to clipboard!",
+    "disclaimer_title": "Disclaimer & Credits",
+    "disclaimer_text": "Я, NyxSile, не перенимаю права, и уважительно отношусь ко всем дистрибуциям и импактам сделанными разработчиками iLoader-а, SideStore, и LiveContainer в мир сайдлоудинга на iOS."
   },
   "dialog": {
     "confirm": "Confirm",
@@ -213,44 +227,44 @@
       ],
       "account_locked": [
         "Don't panic! This usually occurs after multiple failed login attempts, but it is completely harmless.",
-        "Visit ((link:https://iforgot.apple.com/)) to unlock your account."
+        "Go to ((link:https://iforgot.apple.com/)) to unlock your account."
       ],
       "auth": [
-        "Make sure your credentials are correct and try again, even if they were correct.",
-        "If the issue persists, try using another Apple ID.",
-        "Security Key 2FA is not supported. If possible, use an Apple ID with no 2FA or with trusted device 2FA."
+        "Make sure the credentials are correct and try again (even if you're sure they're correct).",
+        "Try using a different Apple ID if the issue persists.",
+        "Security key based two factor authentication is not supported. Use an Apple ID without 2FA or with trusted device verification instead."
       ],
       "download": [
-        "Download SideStore manually from ((link:https://github.com/SideStore/SideStore/releases)) and use the \"Import IPA\" button to install it."
+        "Download SideStore manually from ((link:https://github.com/SideStore/SideStore/releases)) and use the \"Import IPA\" button to install it instead."
       ],
       "house_arrest": [
-        "[ios::26.3]Ensure your device is not on a developer beta of iOS 26.3, as it has a bug with house arrest"
+        "[ios::26.3] Make sure you are not on iOS 26.3 beta, as there is a bug with house arrest on that version."
       ],
       "pairing": [
-        "Try reconnecting the device and running the action again.",
-        "Ensure your device has a passcode set.",
-        "Ensure your device is connected via USB, not wirelessly."
+        "Try reconnecting your device and trying again.",
+        "Make sure your device has a passcode set.",
+        "Make sure your device is connected via USB, not Wi-Fi."
       ],
       "canceled": [],
       "operation_update": [],
       "usbmuxd": [
-        "[platform::windows]Ensure you have ((link:https://apple.co/ms:iTunes)) installed and check that it can detect your device.",
-        "[platform::windows]Uninstall iTunes and Apple Mobile Device Support, then install \"Apple Devices\" from the Microsoft Store.",
-        "[platform::linux]Make sure usbmuxd is installed and running."
+        "[platform::windows] Make sure ((link:https://apple.co/ms:iTunes)) is installed and can see your device.",
+        "[platform::windows] Uninstall iTunes and Apple Mobile Device Support, then install \"Apple Devices\" from the Microsoft Store.",
+        "[platform::linux] Make sure the usbmuxd service is installed and running."
       ],
       "trust": [
-        "Unlock your device, go to the home screen, and accept any trust prompts that appear."
+        "Unlock your device, go to the home screen, and accept the \"Trust This Computer\" prompt if it appears."
       ],
       "device_coms": [
-        "Ensure your device is properly connected to your computer.",
-        "Unplug and reconnect the device. If the issue persists, try a different USB port and cable."
+        "Make sure your device is properly connected to your computer.",
+        "Unplug and replug your device. Try a different USB port or cable if the issue persists."
       ],
-      "not_logged_in": ["Sign in to your Apple ID first."],
-      "no_device_selected": ["Select a device before continuing."],
+      "not_logged_in": ["Please log in to your Apple ID first."],
+      "no_device_selected": ["Please select a device before proceeding."],
       "anisette": [
-        "Ensure your computer is connected to the internet.",
-        "Change your anisette server. Try several different servers.",
-        "Make sure you can access ((link:{{anisetteServerUrl}})) in a browser."
+        "Make sure your computer is connected to the internet.",
+        "Change the Anisette server. Try several different ones.",
+        "Check if ((link:{{anisetteServerUrl}})) opens in your browser."
       ],
       "keyring": [
         "Try enabling \"Don't use keyring\" in settings to bypass this issue. Note that this is less secure."
@@ -262,7 +276,7 @@
         "Try running the app with elevated permissions (as administrator/root)."
       ],
       "filesystem": [
-        "Make sure iloader has permission to read and write files on your system."
+        "Make sure nyx.loader has permission to read and write files on your system."
       ],
       "not_enough_app_ids": [
         "You do not have enough App IDs available to install this app.",
@@ -275,7 +289,7 @@
         "Expired apps still count towards the 3 app limit."
       ]
     },
-    "support_message": "If the issue persists, press \"Copy to clipboard\" and send the copied error to the <discord>Discord</discord> or a <github>GitHub issue</github> for support."
+    "support_message": "If the issue persists, press \"Copy to clipboard\" and send the copied error to <portal>nyx.sideload.space</portal> for support."
   },
   "update": {
     "new_version_available": "A new version is available: {{version}}. Do you want to update?",

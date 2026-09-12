@@ -10,7 +10,13 @@ import { useError } from "./ErrorContext";
 import { Certificate } from "./pages/Certificates";
 import { useTranslation } from "react-i18next";
 
-const storePromise = load("data.json");
+const getSafeStore = async () => {
+  try {
+    return await load("data.json");
+  } catch {
+    return null;
+  }
+};
 
 export const AppleID = ({
   loggedInAs,
@@ -41,13 +47,23 @@ export const AppleID = ({
 
   useEffect(() => {
     let getLoggedInAs = async () => {
-      let account = await invoke<string | null>("logged_in_as");
-      setLoggedInAs(account);
+      try {
+        let account = await invoke<string | null>("logged_in_as");
+        setLoggedInAs(account);
+      } catch {
+        // Fallback for browser preview
+      }
     };
     let getStoredIds = async () => {
-      const store = await storePromise;
-      let ids = (await store.get<string[]>("ids")) ?? [];
-      setStoredIds(ids);
+      try {
+        const store = await getSafeStore();
+        if (store) {
+          let ids = (await store.get<string[]>("ids")) ?? [];
+          setStoredIds(ids);
+        }
+      } catch {
+        // Fallback
+      }
     };
 
     getLoggedInAs();
@@ -64,10 +80,12 @@ export const AppleID = ({
   useEffect(() => {
     if (!listenerAdded.current) {
       (async () => {
-        const unlistenFn = await listen("2fa-required", () => {
-          setTfaOpen(true);
-        });
-        unlisten.current = unlistenFn;
+        try {
+          const unlistenFn = await listen("2fa-required", () => {
+            setTfaOpen(true);
+          });
+          unlisten.current = unlistenFn;
+        } catch {}
       })();
       listenerAdded.current = true;
     }
@@ -82,13 +100,15 @@ export const AppleID = ({
   useEffect(() => {
     if (!certListenerAdded.current) {
       (async () => {
-        const unlistenFn = await listen<Certificate[]>(
-          "max-certs-reached",
-          (certs) => {
-            setCerts(certs.payload);
-          },
-        );
-        certUnlisten.current = unlistenFn;
+        try {
+          const unlistenFn = await listen<Certificate[]>(
+            "max-certs-reached",
+            (certs) => {
+              setCerts(certs.payload);
+            },
+          );
+          certUnlisten.current = unlistenFn;
+        } catch {}
       })();
       certListenerAdded.current = true;
     }

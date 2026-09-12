@@ -157,6 +157,16 @@ pub async fn set_selected_device(
         info: device.unwrap(),
         pairing,
     };
+
+    // Auto-sync pairing file directly onto connected phone if any supported apps exist
+    let info_clone = device_with_pairing.info.clone();
+    let pairing_clone = device_with_pairing.pairing.clone();
+    tokio::spawn(async move {
+        if let Ok(provider) = get_provider(&info_clone).await {
+            let _ = crate::pairing::auto_sync_pairing_to_device(&provider, &pairing_clone).await;
+        }
+    });
+
     let mut device_state = device_state.lock().unwrap();
     *device_state = Some(device_with_pairing);
     Ok(())

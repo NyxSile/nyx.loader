@@ -1,156 +1,141 @@
-<a href="https://iloader.app">
-  <picture align="left" >
-    <source media="(prefers-color-scheme: dark)" srcset="/iloader.svg">
-    <img align="left" width="90" height="90" src="/iloader-dark.svg">
-  </picture>
-  
-  <div id="user-content-toc">
-    <ul style="list-style: none;">
-      <summary>
-        <h1>iloader</h1>
-      </summary>
-    </ul>
-  </div>
-</a>
+<div align="center">
+
+  <img src="public/nyx-loader.png" width="128" height="128" alt="nyx.loader logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);" />
+
+  # nyx.loader
+  ### *The definitive cosmic companion for iOS sideloading*
+
+  [![Build nyx.loader](https://img.shields.io/github/actions/workflow/status/NyxSile/nyx.loader/build.yml?style=for-the-badge&logo=github&logoColor=white&label=Build&color=7c3aed)](https://github.com/NyxSile/nyx.loader/actions)
+  [![Release](https://img.shields.io/badge/Release-n1.0.0-8b5cf6?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/NyxSile/nyx.loader/releases)
+  [![Platforms](https://img.shields.io/badge/Platforms-macOS%20%7C%20Windows%20%7C%20Linux-06b6d4?style=for-the-badge)](https://github.com/NyxSile/nyx.loader/releases)
+  [![License](https://img.shields.io/badge/License-MIT-ec4899?style=for-the-badge)](LICENSE)
+
+  <br />
+
+  **[🌐 Ecosystem Portal](https://nyx.sideload.space)** • **[👾 Developer](https://nyxsile.lol)** • **[📦 Releases](https://github.com/NyxSile/nyx.loader/releases)**
+
+</div>
 
 ---
 
-[![Build iloader](https://img.shields.io/github/actions/workflow/status/nab138/iloader/build.yml?style=flat&logo=github&logoColor=white&label=Build%20iloader)](https://github.com/nab138/iloader/actions/workflows/build.yml) ![Downloads](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fnab138%2F28258aff7e3f1d3a3084a21f4cff2e57%2Fraw%2Filoader_downloads.json&style=flat)
+## 🌌 Overview
 
-Install SideStore (or other apps) and import your pairing file with ease
+**nyx.loader** (`n1.0.0`) is the modern, ultra-fast desktop companion for the **nyx.sideload** ecosystem. Engineered with **Tauri v2**, **Rust**, and **React 19**, it delivers an uncompromising sideloading workflow: painless pairing file extraction and automatic delivery right onto your iOS device, instant drag-and-drop IPA installation, and 1-click SideStore & LiveContainer deployment.
 
-**This repository and [iloader.app](https://iloader.app) are the only official ways to download iloader. There is also an unofficial [Homebrew cask](https://formulae.brew.sh/cask/iloader), an unofficial [AUR package](https://aur.archlinux.org/packages/iloader-bin), and an unofficial [Fedora COPR repository](https://copr.fedorainfracloud.org/coprs/anudeepd/iloader) maintained by the community. Do not download from any other sources or websites.**
+Designed from the ground up with deep cosmic glassmorphism, dynamic interactive particle fields, and lightning-fast native performance.
 
-<img width="1918" height="998" alt="iloader0" src="https://github.com/user-attachments/assets/93cd135d-6d89-46ee-9b9f-12c596806911" />
+---
 
-## How to use
+## ✨ Features
 
-- Install usbmuxd for your platform
-  - Windows: [iTunes](https://apple.co/ms)
-  - macOS: Included
-  - Linux: Potentially included, if not, install via your package manager
-- Install the latest version for your platform from the [releases](https://github.com/nab138/iloader/releases)
-  - NixOS: Use the flake `github:nab138/iloader`
-- Plug in your iDevice to your computer
-- Open the app
-- Sign into your Apple ID
-- Select your action (e.g. install SideStore)
+- ⚡ **Direct iOS Files Pairing Delivery**: Automatically deposits `ALTPairingFile.mobiledevicepairing` and pairing plists directly into your iPhone's storage and app containers. Open the **Files** app on iOS (`On My iPhone` ➔ `SideStore`), and your pairing file is already there!
+- 📦 **Drag & Drop IPA**: Drop any `.ipa` file directly onto the cosmic workspace window to trigger instant code signing and installation.
+- 🚀 **1-Click SideStore & LiveContainer**:
+  - SideStore (Stable & Nightly)
+  - LiveContainer + SideStore combo (Stable & Nightly)
+  - Automatic certificate creation, provisioning profile installation, and pairing injection.
+- 🌌 **Cosmic Glassmorphism & Simple Mode**:
+  - Immersive neon glass aesthetics with interactive stars canvas.
+  - Dedicated **Simple Mode** toggle for lightweight, zero-blur execution on low-end PCs.
+- 📋 **Device Management & UDID**:
+  - Live connection badges (**USB** / **Wi-Fi**).
+  - 1-click **Copy UDID** button for quick developer portal registrations.
+- 🛡️ **Apple ID & Certificates**:
+  - Sign in safely with Apple ID (native secure keychain or direct memory session).
+  - View, inspect, and revoke development certificates and App IDs directly inside the app.
+  - Custom Anisette server selection with zero lock-in.
+- 🩺 **1-Click Diagnostic Copy**:
+  - Instant full environment diagnostic dump to clipboard for effortless troubleshooting.
 
-## Features
+---
 
-- Install SideStore (or LiveContainer + SideStore), import certificate and place rppairing+lockdown pairing files automatically
-- Import any IPA
-- Intelligent error suggestions to help resolve common issues
-- Manage pairing files in apps like StikDebug, SideStore, Protokolle, etc
-- See and revoke development certificates & app ids
+## 📥 Download & Installation
 
-## Troubleshooting
+Get the latest binary for your operating system from the **[Releases Page](https://github.com/NyxSile/nyx.loader/releases)**:
 
-- If you are unable to solve an issue on your own, copy the full error message and ask on the [idevice Discord server](https://discord.gg/EA6yVgydBz) or [open an issue](https://github.com/nab138/iloader/issues).
-- You can view app logs with the "View Logs." If nothing is showing up, change the log level to "Debug."
-- If those logs aren't helpful, logs with additional are stored in the following locations:
-  - Windows: `%APPDATA%\me.nabdev.iloader\logs`
-  - macOS: `~/Library/Application Support/me.nabdev.iloader/logs`
-  - Linux: `~/.local/share/me.nabdev.iloader/logs/`
+### 🍏 macOS (Universal: Apple Silicon M1-M4 & Intel)
+1. Download `nyx.loader-macos-universal.dmg`.
+2. Open the `.dmg` and drag **nyx.loader** to your `Applications` folder.
+3. *Note:* Ensure you have connected your iOS device and selected **Trust this computer** on your device screen.
 
-## Translating
+### 🪟 Windows (x64)
+1. Install [iTunes for Windows (Direct from Apple)](https://apple.co/ms) to ensure Apple USB drivers (`usbmuxd`) are installed.
+2. Download `nyx.loader-windows-x86_64.exe` from Releases.
+3. Run the installer and launch **nyx.loader**.
 
-iloader needs localization! If you speak another language and notice iloader does not support it or has mistakes, please consider contributing.
+### 🐧 Linux (Debian, Ubuntu, Fedora, Arch & ARM64)
+- **AppImage**: Download `nyx.loader-linux-x86_64.AppImage` (or `arm64`), make executable (`chmod +x nyx.loader*.AppImage`), and run!
+- **Debian / Ubuntu**: `sudo dpkg -i nyx.loader-linux-x86_64.deb`
+- **RPM (Fedora / RHEL)**: `sudo rpm -i nyx.loader-linux-x86_64.rpm`
+- Make sure `usbmuxd` is active: `sudo systemctl start usbmuxd`.
 
-To update/edit an existing language, make a PR modifying `src/locales/<lang>.json`.
+---
 
-To add a new language, add your language to `src/i18next.ts`, and in `src/locales` copy `en.json` to a new file titled `<langcode>.json` and update the strings.
+## 🚀 Quick Start
 
-**i18next.ts:**
-
-```ts
-const languages = [
-  ["en", "English"],
-  ["es", "Español"],
-  // Your language here...
-] as const;
+```text
+ 1. Connect your iPhone or iPad to your computer via USB (or Wi-Fi).
+ 2. Open nyx.loader and sign into your Apple ID.
+ 3. Click on your device in the DEVICES list.
+ 4. Click "SideStore (Stable)" or drop your favorite .ipa onto the window!
+ 5. nyx.loader handles pairing, certificates, and installation automatically.
 ```
 
-You can also add your name to the translators section of the README.
+---
 
-Thank you for translating!
+## 🛠️ Building from Source
 
-## Building from source
+### Prerequisites
+- [Node.js](https://nodejs.org) (v20+) or [Bun](https://bun.sh)
+- [Rust](https://www.rust-lang.org/tools/install) (1.78+)
+- Platform native build dependencies:
+  - **macOS**: Xcode Command Line Tools (`xcode-select --install`)
+  - **Linux**: `libwebkit2gtk-4.1-dev`, `libappindicator3-dev`, `librsvg2-dev`, `patchelf`
+  - **Windows**: Visual Studio C++ Build Tools
 
-1. Install [bun](https://bun.sh) (or [Node.js](https://nodejs.org)) and [Rust](https://www.rust-lang.org/tools/install)
-2. Clone the repository and `cd` into it
-3. Run `bun i` (or `npm i`)
+### Clone & Build
 
-For development with hot reload: `bun tauri dev` (or `npm run tauri dev`)
-Make a production build: `bun tauri build` (or `npm run tauri build`)
+```bash
+# Clone the repository
+git clone https://github.com/NyxSile/nyx.loader.git
+cd nyx.loader
 
-## Credits
+# Install dependencies
+npm install  # or bun install
 
-- Icon made by [Transistor](https://github.com/transistor-exe)
-- UI improved by [StephenDev0](https://github.com/StephenDev0)
-- [idevice](https://github.com/jkcoxson/idevice) by [jkcoxson](https://github.com/jkcoxson) for communicating with iOS devices
-- [isideload](https://github.com/nab138/isideload) for installing apps
-  - [idevice](https://github.com/jkcoxson/idevice) by [jkcoxson](https://github.com/jkcoxson) crate is used to communicate with the device
-  - [apple-codesign-quick](https://github.com/Dadoum/apple-codesign-quick) by [Dadoum](https://github.com/Dadoum) for codesigning and entitlements
-  - [Impactor](https://github.com/claration/Impactor) by [claration](https://github.com/claration) was used as a reference for cryptography operations (converting certs to p12, etc.).
-  - [Sideloader](https://github.com/Dadoum/Sideloader) by [Dadoum](https://github.com/Dadoum) was used as a reference for how apple private developer endpoints work
-- [idevice_pair](https://github.com/jkcoxson/idevice_pair) was used as a reference for pairing file management
-- App made with [tauri](https://tauri.app)
+# Run frontend in development mode with HMR
+npm run dev
 
-## Translators
+# Run desktop app in development mode
+npm run tauri dev
 
-Thank you to everyone who has contributed translations! See the [Translating](#translating) section if you would like to contribute as well.
+# Build production bundle for your platform
+npm run tauri build
+```
 
-- [By3lish](https://github.com/by3lish): Azerbaijani (az)
-- [TNT-333](https://github.com/TNT-333): German (de)
-- [basketshoe](https://github.com/basketshoe): Italian (it)
-- [baocreata](https://github.com/baocreata): Vietnamese (vt)
-- [IamArayel](https://github.com/IamArayel): French (fr)
-- [kkula9999](https://github.com/kkula9999): Traditional & Simplified Chinese (zh_tw & zh_cn)
-- [sibwaze](https://github.com/sibwaze): Russian (ru)
-- [notmalicik](https://github.com/notmalicik): Română (ro)
-- [mirdukkkkk](https://github.com/mirdukkkkk): Improved Russian (ru)
-- [okinaau](https://github.com/okinaau): Arabic (ar)
-- [ChouChiu](https://github.com/ChouChiu): Cantonese (zh_hk) & Improved Chinese (zh_tw & zh_cn)
-- [marcinmajsc](https://github.com/marcinmajsc): Polish (pl)
-- [ern775](https://github.com/ern775): Turkish (tr)
-- [canpng](https://github.com/canpng): Improved Turkish (tr)
-- [jazoppix](https://github.com/jazoppix): Spanish (es)
-- [eseiker](https://github.com/eseiker): Korean (ko)
-- [seomin0610](https://github.com/seomin0610): Improved Korean (ko)
-- [Ordyan777](https://github.com/Ordyan777): Armenian (am)
-- [kakik0u](https://github.com/kakik0u): Japanese (ja)
-- [lkspodmol](https://github.com/lkspodmol): Czech (cs_cz)
-- [marcusherelammonstyle-cmd](https://github.com/marcusherelammonstyle-cmd): Swedish (sv)
-- [MCI49312](https://github.com/MCI49312): Hungarian (hu)
-- [Kynonim](https://github.com/Kynonim): Indonesian (id)
-- [DD00031](https://github.com/DD00031): Dutch (nl)
-- [Toritan123](https://github.com/Toritan123): Improved Japanese (ja)
-- [marcinmajsc](https://github.com/marcinmajsc): Improved Polish (pl)
-- [dleiferives](https://github.com/dleiferives): Greek (el)
-- [ShadowWLX](https://github.com/ShadowWLX): Improved French (fr)
-- [fkpcomposer](https://github.com/fkpcomposer): Brazilian Portuguese (pt_br)
-- [474FrediFred](https://github.com/474FrediFred): Swiss German (de_ch)
+---
 
-## License
+## ⚖️ Disclaimer
 
-Copyright (C) 2026 nab138
+> [!NOTE]
+> *«Я, NyxSile, не перенимаю права, и уважительно отношусь ко всем дистрибуциям и импактам сделанными разработчиками iLoader-а, SideStore, и LiveContainer в мир сайдлоудинга на iOS.»*
+>
+> nyx.loader is an independent companion application created for enthusiasts within the sideloading ecosystem. Apple, iPhone, iPad, iOS, macOS, and iTunes are trademarks of Apple Inc. nyx.loader is not affiliated with, endorsed by, or sponsored by Apple Inc.
 
-The source code of this repository is licensed under the MIT License. See the [LICENSE](/LICENSE) file for the full text.
+---
 
-Branding, logos, media assets, and the name “iloader” are not licensed under the MIT License and are subject to separate restrictions.
+## 💜 Credits & Acknowledgements
 
-You may retain or use branding materials in forks, tutorials, or documentation if you include a clear link to either the official site (https://iloader.app) or the iloader source code repository (https://github.com/nab138/iloader) and do not imply official endorsement. See [LICENSE-BRANDING](/LICENSE-BRANDING) for full details.
+- **Original Base**: [iloader](https://github.com/nab138/iloader) by [nab138](https://github.com/nab138).
+- **Device Communication**: [idevice](https://github.com/jkcoxson/idevice) by [jkcoxson](https://github.com/jkcoxson).
+- **App Installation & Sideloading**: [isideload](https://github.com/nab138/isideload).
+- **Codesigning**: [apple-codesign-quick](https://github.com/Dadoum/apple-codesign-quick) & [Sideloader](https://github.com/Dadoum/Sideloader) by [Dadoum](https://github.com/Dadoum).
+- **Pairing Protocols**: [idevice_pair](https://github.com/jkcoxson/idevice_pair).
+- **Ecosystem**: [nyx.sideload](https://nyx.sideload.space) by **NyxSile**.
+- Built with [Tauri v2](https://tauri.app) & [React](https://react.dev).
 
-## Future Plans
+---
 
-- Checks for if device is in developer mode, has password set, etc
-- Automatic anisette fallback
-- Team selection when an account has multiple teams
-- Auto-refresh installed apps
-  - Minimize to tray
-  - Detect installed apps
-  - Refresh apps automatically
-- Set a "default" account to automatically log into
-- Import SideStore account info automatically
-- Mount DDI and open sidestore after installation
+<div align="center">
+  <sub>Crafted with 💜 for the sideloading community by <a href="https://nyxsile.lol">NyxSile</a>.</sub>
+</div>

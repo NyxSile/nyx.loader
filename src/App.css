@@ -168,6 +168,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 1.4rem;
 }
 
 .section-label {
@@ -185,10 +186,6 @@ body {
 .section-hint {
   font-size: 0.9rem;
   color: rgba(247, 249, 255, 0.5);
-}
-
-.section-hint.placeholder {
-  visibility: hidden;
 }
 
 input,

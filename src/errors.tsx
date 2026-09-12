@@ -120,8 +120,9 @@ export const getErrorSuggestions = (
   platform: "mac" | "windows" | "linux",
   anisetteServer: string,
 ): string[] => {
+  const keys = errorSuggestionKeys[type] ?? [];
   return dedupeSuggestions(
-    errorSuggestionKeys[type].flatMap((key) =>
+    keys.flatMap((key) =>
       getSuggestionBlock(t, key, platform, anisetteServer),
     ),
   );

@@ -61,6 +61,19 @@ export const Pairing = () => {
     [setApps, loadApps, t],
   );
 
+  const saveToDevice = useCallback(async () => {
+    const promise = async () => {
+      const savedApps = await invoke<string[]>("save_pairing_to_device_cmd");
+      return savedApps;
+    };
+    toast.promise(promise, {
+      loading: t("pairing.saving_to_device"),
+      success: (savedApps) =>
+        t("pairing.saved_to_device_success", { apps: savedApps.join(", ") }),
+      error: (e) => err(t("pairing.failed_place_pairing"), e),
+    });
+  }, [t, err]);
+
   useEffect(() => {
     loadApps();
   }, []);
@@ -115,26 +128,34 @@ export const Pairing = () => {
       )}
       <button
         style={{ marginTop: "1em", width: "100%" }}
-        onClick={() => {
-          let promise = async () => {
-            for (const app of apps) {
-              await invoke<void>("place_pairing_cmd", {
-                bundleId: app.bundleId,
-                path: app.path,
-              });
-            }
-          };
-          toast.promise(promise, {
-            loading: t("pairing.placing_pairing_file"),
-            success: t("pairing.pairing_file_placed_success"),
-            error: (e) => err(t("pairing.failed_place_pairing"), e),
-          });
-        }}
+        onClick={saveToDevice}
       >
-        {t("pairing.place_all")}
+        {t("pairing.save_to_device")}
       </button>
+      {apps.length > 0 && (
+        <button
+          style={{ marginTop: "0.6em", width: "100%" }}
+          onClick={() => {
+            let promise = async () => {
+              for (const app of apps) {
+                await invoke<void>("place_pairing_cmd", {
+                  bundleId: app.bundleId,
+                  path: app.path,
+                });
+              }
+            };
+            toast.promise(promise, {
+              loading: t("pairing.placing_pairing_file"),
+              success: t("pairing.pairing_file_placed_success"),
+              error: (e) => err(t("pairing.failed_place_pairing"), e),
+            });
+          }}
+        >
+          {t("pairing.place_all")}
+        </button>
+      )}
       <button
-        style={{ marginTop: "1em", width: "100%" }}
+        style={{ marginTop: "0.6em", width: "100%" }}
         onClick={() => {
           confirm(
             t("pairing.advanced_export_title"),
@@ -153,7 +174,7 @@ export const Pairing = () => {
         {t("pairing.export_not_recommended")}
       </button>
       <button
-        style={{ marginTop: "1em", width: "100%" }}
+        style={{ marginTop: "0.6em", width: "100%" }}
         onClick={loadApps}
         disabled={loading}
       >

@@ -106,3 +106,57 @@
 .log-entry {
   padding: 0 0.65em;
 }
+
+.nyx-disclaimer-card {
+  margin-top: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  background: rgba(123, 97, 255, 0.05);
+  border: 1px solid rgba(123, 97, 255, 0.2);
+  text-align: left;
+}
+
+.nyx-disclaimer-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-primary, #7b61ff);
+  margin-bottom: 0.4rem;
+}
+
+.nyx-disclaimer-text {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--text-muted, #94a3b8);
+  margin: 0 0 0.6rem 0;
+}
+
+.nyx-disclaimer-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+}
+
+.disclaimer-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent-secondary, #38bdf8);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.disclaimer-link-btn:hover {
+  color: #fff;
+}
+
+.disclaimer-separator {
+  color: var(--text-muted, #64748b);
+  user-select: none;
+}
+

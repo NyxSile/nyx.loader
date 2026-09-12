@@ -6,11 +6,13 @@ import { useTranslation } from "react-i18next";
 import { Modal } from "./components/Modal";
 import { useError } from "./ErrorContext";
 import { AppError } from "./errors";
+import { LuUsb, LuWifi, LuCopy } from "react-icons/lu";
 
 export type DeviceInfo = {
   name: string;
   id: number;
-  uuid: string;
+  udid: string;
+  uuid?: string;
   connectionType: "USB" | "Network" | "Unknown";
   version: string;
 };
@@ -92,7 +94,7 @@ export const Device = ({
 
   const loadDevices = useCallback(async () => {
     if (listingDevices.current) return;
-    const promise = new Promise<number>(async (resolve, reject) => {
+    const promise = new Promise<number>(async (resolve) => {
       listingDevices.current = true;
       try {
         const results = await invoke<
@@ -140,7 +142,7 @@ export const Device = ({
         setDevices([]);
         selectDevice(null);
         listingDevices.current = false;
-        reject(e);
+        resolve(0);
       }
     });
 
@@ -204,25 +206,57 @@ export const Device = ({
         )}
         {devices.map((device) => {
           const isActive = selectedDevice?.id === device.id;
+          const isWifi = device.connectionType === "Network";
+          const udid = device.udid || device.uuid;
           return (
-            <button
+            <div
               key={device.id}
               className={"device-card card" + (isActive ? " active" : "")}
               onClick={() => selectDevice(device)}
-              disabled={waitingToPair !== null}
+              role="button"
+              tabIndex={0}
             >
               <div className="device-meta">
-                <span className="device-name">{device.name}</span>
-                <span className="device-connection">
-                  {device.connectionType}
-                </span>
+                <div className="device-title-row">
+                  <span className="device-name">{device.name}</span>
+                  <span
+                    className={`device-connection-badge ${isWifi ? "wifi" : "usb"}`}
+                  >
+                    {isWifi ? (
+                      <>
+                        <LuWifi size={12} className="badge-icon" /> Wi-Fi
+                      </>
+                    ) : (
+                      <>
+                        <LuUsb size={12} className="badge-icon" /> USB
+                      </>
+                    )}
+                  </span>
+                </div>
+                <div className="device-sub-row">
+                  <span className="device-version">iOS {device.version}</span>
+                  {udid && (
+                    <button
+                      type="button"
+                      className="device-udid-btn"
+                      title={t("device.click_to_copy_udid")}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigator.clipboard.writeText(udid);
+                        toast.success(t("device.udid_copied_success"));
+                      }}
+                    >
+                      <LuCopy size={11} className="btn-icon" /> UDID
+                    </button>
+                  )}
+                </div>
               </div>
               {isActive && (
                 <span className="device-selected-pill">
                   {t("device.selected")}
                 </span>
               )}
-            </button>
+            </div>
           );
         })}
         <button disabled={waitingToPair !== null} onClick={loadDevices}>

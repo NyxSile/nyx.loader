@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
+import "./nyx-theme.css";
 import { AppleID } from "./AppleID";
 import { Device, DeviceInfo } from "./Device";
 import { invoke } from "@tauri-apps/api/core";
@@ -14,6 +15,8 @@ import {
   OperationUpdate,
 } from "./components/operations";
 import { listen } from "@tauri-apps/api/event";
+import { getCurrentWebview } from "@tauri-apps/api/webview";
+import { LuZap, LuSparkles, LuPackage } from "react-icons/lu";
 import OperationView from "./components/OperationView";
 import { toast } from "sonner";
 import { Modal } from "./components/Modal";
@@ -23,13 +26,15 @@ import { Settings } from "./pages/Settings";
 import { Pairing } from "./pages/Pairing";
 import { getVersion } from "@tauri-apps/api/app";
 import { checkForUpdates } from "./update";
-import logo from "./iloader.svg";
 import { GlassCard } from "./components/GlassCard";
 import { useTranslation } from "react-i18next";
 import { usePlatform } from "./PlatformContext";
+import { StarsBackground } from "./components/StarsBackground";
+import { useStore } from "./StoreContext";
 
 function App() {
   const { t } = useTranslation();
+  const [simpleMode, setSimpleMode] = useStore<boolean>("simpleMode", false);
 
   const [operationState, setOperationState] = useState<OperationState | null>(
     null,
@@ -40,6 +45,7 @@ function App() {
     null | "certificates" | "appids" | "pairing"
   >(null);
   const [version, setVersion] = useState<string>("");
+  const [isDraggingOver, setIsDraggingOver] = useState<boolean>(false);
 
   const refreshDevicesRef = useRef<(() => void) | null>(null);
 
@@ -62,14 +68,20 @@ function App() {
 
   useEffect(() => {
     const fetchVersion = async () => {
-      const version = await getVersion();
-      setVersion(version);
+      try {
+        const ver = await getVersion();
+        setVersion(ver.startsWith("n") ? ver : `n${ver}`);
+      } catch {
+        setVersion("n1.0.0");
+      }
     };
     fetchVersion();
   }, []);
 
   useEffect(() => {
-    checkForUpdates();
+    try {
+      checkForUpdates().catch(() => {});
+    } catch {}
   }, []);
 
   const shortcutLabel = useCallback(
@@ -171,6 +183,9 @@ function App() {
       } else if (!event.shiftKey && key === "r") {
         event.preventDefault();
         refreshDevicesRef.current?.();
+      } else if (event.shiftKey && key === "s") {
+        event.preventDefault();
+        setSimpleMode((prev) => !prev);
       }
     };
 
@@ -178,34 +193,110 @@ function App() {
     return () => window.removeEventListener("keydown", handler);
   }, [platform, ensureSelectedDevice, ensuredLoggedIn]);
 
+  useEffect(() => {
+    let unlisten: (() => void) | undefined;
+    try {
+      getCurrentWebview()
+        .onDragDropEvent((event) => {
+          if (event.payload.type === "over") {
+            setIsDraggingOver(true);
+          } else if (event.payload.type === "drop") {
+            setIsDraggingOver(false);
+            const paths = event.payload.paths;
+            const ipa = paths.find((p) => p.toLowerCase().endsWith(".ipa"));
+            if (ipa) {
+              if (!ensuredLoggedIn() || !ensureSelectedDevice()) return;
+              startOperation(sideloadOperation, {
+                appPath: ipa,
+              }).catch((e) => {
+                console.error("Drag-and-drop sideload error:", e);
+              });
+            } else if (paths.length > 0) {
+              toast.error(t("app.only_ipa_supported"));
+            }
+          } else {
+            setIsDraggingOver(false);
+          }
+        })
+        .then((fn) => {
+          unlisten = fn;
+        })
+        .catch(() => {});
+    } catch {}
+
+    return () => {
+      if (unlisten) unlisten();
+    };
+  }, [ensuredLoggedIn, ensureSelectedDevice, startOperation, t]);
+
   return (
-    <main className="workspace">
+    <main
+      className={`workspace ${simpleMode ? "simple-mode" : ""}`}
+      onDragOver={(e) => {
+        e.preventDefault();
+        setIsDraggingOver(true);
+      }}
+      onDragLeave={() => setIsDraggingOver(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        setIsDraggingOver(false);
+      }}
+    >
+      {!simpleMode && <StarsBackground />}
       <header className="workspace-header">
         <div className="header-left">
           <div className="title-block">
-            <img src={logo} alt={t("app.logo_alt")} className="logo" />
+            <img src="/nyx-loader.png" alt="nyx.loader" className="logo" />
             <div>
-              <h1 className="title">iloader</h1>
-              <p className="subtitle">{t("subtitle")}</p>
+              <h1 className="title">
+                nyx<span className="accent-dot">.</span>loader
+              </h1>
+              <p className="subtitle">nyx.sideload desktop companion</p>
             </div>
           </div>
           <span className="version-pill">
-            {t("version")} {version}
+            {version || "n1.0.0"}
           </span>
         </div>
         <div className="header-actions">
           <button
+            className={`toolbar-button simple-mode-btn ${simpleMode ? "active" : ""}`}
+            onClick={() => setSimpleMode((prev) => !prev)}
+            title={t("settings.simple_mode_desc")}
+          >
+            {simpleMode ? (
+              <>
+                <LuZap size={13} className="toolbar-btn-icon" /> Simple: ON
+              </>
+            ) : (
+              <>
+                <LuSparkles size={13} className="toolbar-btn-icon" /> Stars: ON
+              </>
+            )}
+          </button>
+          <button
             className="toolbar-button"
             onClick={async () => {
               try {
-                await openUrl("https://github.com/nab138/iloader");
+                await openUrl("https://nyx.sideload.space");
               } catch (error) {
-                console.error("Failed to open GitHub link", error);
-                toast.error(t("app.open_github_failed"));
+                console.error("Failed to open nyx.sideload.space link", error);
               }
             }}
           >
-            {t("app.github")}
+            nyx.sideload.space
+          </button>
+          <button
+            className="toolbar-button"
+            onClick={async () => {
+              try {
+                await openUrl("https://nyxsile.lol");
+              } catch (error) {
+                console.error("Failed to open nyxsile.lol link", error);
+              }
+            }}
+          >
+            nyxsile.lol
           </button>
         </div>
       </header>
@@ -214,10 +305,6 @@ function App() {
           <section className="workspace-section">
             <div className="section-header">
               <p className="section-label">{t("app.section_account")}</p>
-              {/* here to ensure spacing and stuff is correct */}
-              <span className="section-hint placeholder" aria-hidden="true">
-                Placeholder
-              </span>
             </div>
             <GlassCard className="panel">
               <AppleID
@@ -416,6 +503,21 @@ function App() {
       <Modal isOpen={openModal === "pairing"} close={() => setOpenModal(null)}>
         <Pairing />
       </Modal>
+      {isDraggingOver && (
+        <div className="drag-drop-overlay">
+          <div className="drag-drop-modal">
+            <div className="drag-drop-icon">
+              <LuPackage size={44} color="#7b61ff" />
+            </div>
+            <h3>{t("app.drop_ipa_title")}</h3>
+            <p>
+              {t("app.drop_ipa_desc", {
+                device: selectedDevice ? selectedDevice.name : "iPhone",
+              })}
+            </p>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

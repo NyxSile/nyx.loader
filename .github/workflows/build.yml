@@ -1,4 +1,4 @@
-name: "Build iloader"
+name: "Build nyx.loader"
 
 on:
   push:
@@ -51,9 +51,9 @@ jobs:
             ~/.cargo/git
             src-tauri/target
             node_modules
-          key: ${{ matrix.platform }}-iloader-${{ hashFiles('**/Cargo.lock', 'package-lock.json') }}
+          key: ${{ matrix.platform }}-nyx-loader-${{ hashFiles('**/Cargo.lock', 'package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-iloader-
+            ${{ runner.os }}-nyx-loader-
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
@@ -80,7 +80,7 @@ jobs:
           bun-version: latest
 
       - name: Install frontend dependencies
-        run: bun i --frozen-lockfile
+        run: bun i
 
       - name: Clean old bundles
         if: matrix.platform != 'macos-latest'
@@ -108,8 +108,8 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
-          args: ${{ matrix.args }} ${{ github.event_name != 'release' && ' --config src-tauri/ci.conf.json' || '' }}
-          includeUpdaterJson: ${{ github.event_name == 'release' }}
+          args: ${{ matrix.args }}
+          includeUpdaterJson: false
           releaseId: ${{ github.event_name == 'release' && github.event.release.id || '' }}
           assetNamePattern: "[name]-[platform]-[arch][ext]"
 

@@ -1,6 +1,6 @@
 import "./Settings.css";
 import { useStore } from "../StoreContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LogLevel, useLogs } from "../LogContext";
 import { Modal } from "../components/Modal";
 import { Dropdown } from "../components/Dropdown";
@@ -49,6 +49,7 @@ export const Settings = ({
     "overrideKeyring",
     false,
   );
+  const [simpleMode, setSimpleMode] = useStore<boolean>("simpleMode", false);
   // const [appIdDeletion, setAppIdDeletion] = useStore<boolean>(
   //   "appIdDeletion",
   //   false,
@@ -99,27 +100,51 @@ export const Settings = ({
 
   useEffect(() => {
     (async () => {
-      await invoke("force_disable_keyring", { force: overrideKeyring });
-      checkKeyring();
+      try {
+        await invoke("force_disable_keyring", { force: overrideKeyring });
+        checkKeyring();
+      } catch {}
     })();
   }, [overrideKeyring]);
+
+  const copyDiagnosticLogs = useCallback(() => {
+    const header = [
+      `=== nyx.loader Diagnostic Log ===`,
+      `Version: n1.0.0`,
+      `Time: ${new Date().toISOString()}`,
+      `Platform: ${platform}`,
+      `=================================`,
+      "",
+    ].join("\n");
+
+    const body = logs
+      .map(
+        (log) =>
+          `[${log.timestamp}] [${LogLevel[log.level]}] ${log.target ? `<${log.target}>` : ""} ${log.message}`,
+      )
+      .join("\n");
+
+    navigator.clipboard.writeText("```\n" + header + body + "\n```");
+    toast.success(t("settings.diagnostic_logs_copied"));
+  }, [logs, platform, t]);
 
   return (
     <>
       <div className="settings-container">
-        <Dropdown
-          label={t("settings.anisette_server")}
-          labelId="anisette-label"
-          options={anisetteOptions}
-          value={anisetteServer}
-          onChange={setAnisetteServer}
-          allowCustom
-          defaultCustomValue="ani.yourserver.com"
-          customPlaceholder={t("settings.custom_anisette_placeholder")}
-          customLabel={t("settings.custom_anisette")}
-          customToggleLabel={t("settings.use_custom_anisette")}
-          presetToggleLabel={t("settings.back_preset_servers")}
-        />
+        <div>
+          <Dropdown
+            label={t("settings.anisette_server")}
+            labelId="anisette-server-label"
+            options={anisetteOptions}
+            value={anisetteServer}
+            onChange={setAnisetteServer}
+            allowCustom
+            customPlaceholder={t("settings.custom_anisette_placeholder")}
+            customLabel={t("settings.custom_anisette")}
+            customToggleLabel={t("settings.use_custom_anisette")}
+            presetToggleLabel={t("settings.back_preset_servers")}
+          />
+        </div>
         <div>
           <Dropdown
             label={t("app.language")}
@@ -139,7 +164,7 @@ export const Settings = ({
                   <span
                     onClick={() =>
                       openUrl(
-                        "https://github.com/nab138/iloader?tab=readme-ov-file#translating",
+                        "https://nyx.sideload.space",
                       )
                     }
                     role="link"
@@ -204,6 +229,9 @@ export const Settings = ({
               aria-hidden="true"
               className="text-muted"
             >{` (${shortcutLabel("⌘L", "Ctrl+L")})`}</span>
+          </button>
+          <button onClick={copyDiagnosticLogs}>
+            {t("settings.copy_diagnostic_logs")}
           </button>
         </div>
         <Modal
@@ -277,22 +305,46 @@ export const Settings = ({
             {t("settings.dont_use_keyring_message")}
           </span>
         </div>
-        {/* <div>
+        <div>
           <label className="settings-label">
-            Allow App ID deletion:
+            {t("settings.simple_mode")}
             <input
               type="checkbox"
-              checked={appIdDeletion}
+              checked={simpleMode}
               onChange={(e) => {
-                setAppIdDeletion(e.target.checked);
+                setSimpleMode(e.target.checked);
               }}
             />
           </label>
           <span className="settings-hint">
-            Not recommended for free dev accounts, this just hides them from the
-            list. You still need to wait for them to expire to free up space.
+            {t("settings.simple_mode_desc")}
           </span>
-        </div> */}
+        </div>
+        <div className="nyx-disclaimer-card">
+          <div className="nyx-disclaimer-title">
+            {t("settings.disclaimer_title")}
+          </div>
+          <p className="nyx-disclaimer-text">
+            {t("settings.disclaimer_text")}
+          </p>
+          <div className="nyx-disclaimer-links">
+            <button
+              type="button"
+              className="disclaimer-link-btn"
+              onClick={() => openUrl("https://nyx.sideload.space")}
+            >
+              nyx.sideload.space
+            </button>
+            <span className="disclaimer-separator">•</span>
+            <button
+              type="button"
+              className="disclaimer-link-btn"
+              onClick={() => openUrl("https://nyxsile.lol")}
+            >
+              nyxsile.lol
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );

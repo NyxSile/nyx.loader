@@ -1,18 +1,18 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "iloader",
-  "version": "2.3.3",
-  "identifier": "me.nabdev.iloader",
+  "productName": "nyx.loader",
+  "version": "1.0.0",
+  "identifier": "lol.nyxsile.loader",
   "build": {
-    "beforeDevCommand": "bun run dev",
+    "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "bun run build",
+    "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
   "app": {
     "windows": [
       {
-        "title": "iloader",
+        "title": "nyx.loader",
         "width": 800,
         "height": 600,
         "minHeight": 300,
@@ -25,16 +25,16 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEUwRDc0NjBERkEzN0U1MzYKUldRMjVUZjZEVWJYNFA0eWtoOGRyRFBtc3BnN20zWFpzbmVNaiswVmhlNm9GUzFzTjRPYmxSaHIK",
+      "pubkey": "",
       "endpoints": [
-        "https://github.com/nab138/iloader/releases/latest/download/latest.json"
+        "https://github.com/NyxSile/nyx.loader/releases/latest/download/latest.json"
       ]
     }
   },
   "bundle": {
     "active": true,
     "targets": "all",
-    "createUpdaterArtifacts": true,
+    "createUpdaterArtifacts": false,
     "category": "Utility",
     "icon": [
       "icons/32x32.png",

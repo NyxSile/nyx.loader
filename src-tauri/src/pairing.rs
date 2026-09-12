@@ -164,6 +164,37 @@ async fn generate_rppairing(
     Ok(pairing_file)
 }
 
+async fn write_single_file(
+    afc_client: &mut idevice::afc::AfcClient,
+    full_path: &str,
+    data: &[u8],
+) -> Result<(), AppError> {
+    if let Some((parent, _)) = full_path.rsplit_once('/') {
+        if !parent.is_empty() {
+            let _ = afc_client.mk_dir(parent.to_string()).await;
+        }
+    }
+
+    let mut file = afc_client
+        .open(
+            full_path.to_string(),
+            idevice::afc::opcode::AfcFopenMode::Wr,
+        )
+        .await
+        .map_err(|e| {
+            AppError::HouseArrest(format!("Failed to open {} on device", full_path), e.to_string())
+        })?;
+
+    file.write_entire(data)
+        .await
+        .map_err(|e| AppError::HouseArrest(format!("Failed to write {}", full_path), e.to_string()))?;
+    file.close()
+        .await
+        .map_err(|e| AppError::HouseArrest(format!("Failed to close {}", full_path), e.to_string()))?;
+
+    Ok(())
+}
+
 pub async fn place_file(
     pairing: Vec<u8>,
     provider: &dyn IdeviceProvider,
@@ -179,32 +210,21 @@ pub async fn place_file(
         .await
         .map_err(|e| AppError::HouseArrest("Failed to vend documents".into(), e.to_string()))?;
 
-    afc_client
-        .mk_dir(format!(
-            "/Documents/{}",
-            path.rsplit_once('/').map(|x| x.0).unwrap_or("")
-        ))
-        .await
-        .map_err(|e| {
-            AppError::HouseArrest("Failed to create Documents directory".into(), e.to_string())
-        })?;
+    // 1. Primary path requested by application
+    let target_path = format!("/Documents/{}", path.trim_start_matches('/'));
+    write_single_file(&mut afc_client, &target_path, &pairing).await?;
 
-    let mut file = afc_client
-        .open(
-            format!("/Documents/{}", path),
-            idevice::afc::opcode::AfcFopenMode::Wr,
-        )
-        .await
-        .map_err(|e| {
-            AppError::HouseArrest("Failed to open file on device".into(), e.to_string())
-        })?;
+    // 2. Also ensure standard files exist directly in root /Documents so they are visible
+    // and accessible in the iOS Files app ("На моем iPhone")
+    let alt_path = "/Documents/ALTPairingFile.mobiledevicepairing";
+    if target_path != alt_path {
+        let _ = write_single_file(&mut afc_client, alt_path, &pairing).await;
+    }
 
-    file.write_entire(&pairing)
-        .await
-        .map_err(|e| AppError::HouseArrest("Failed to write pairing file".into(), e.to_string()))?;
-    file.close()
-        .await
-        .map_err(|e| AppError::HouseArrest("Failed to close file".into(), e.to_string()))?;
+    let plist_path = "/Documents/pairingFile.plist";
+    if target_path != plist_path {
+        let _ = write_single_file(&mut afc_client, plist_path, &pairing).await;
+    }
 
     Ok(())
 }
@@ -226,6 +246,121 @@ pub async fn place_pairing_cmd(
     let provider = get_provider(&device.info).await?;
 
     place_file(device.pairing, &provider, bundle_id, path).await
+}
+
+#[tauri::command]
+pub async fn save_pairing_to_device_cmd(
+    device_state: State<'_, DeviceInfoMutex>,
+) -> Result<Vec<String>, AppError> {
+    let device = {
+        let device_guard = device_state.lock().unwrap();
+        match &*device_guard {
+            Some(d) => d.clone(),
+            None => return Err(AppError::NoDeviceSelected),
+        }
+    };
+
+    let provider = get_provider(&device.info).await?;
+    let mut installation_proxy =
+        InstallationProxyClient::connect(&provider)
+            .await
+            .map_err(|e| {
+                AppError::DeviceComsWithMessage(
+                    "Failed to connect to installation proxy".into(),
+                    e.to_string(),
+                )
+            })?;
+
+    let installed_apps = installation_proxy
+        .get_apps(Some("User"), None)
+        .await
+        .map_err(|e| {
+            AppError::DeviceComsWithMessage("Failed to get installed apps".into(), e.to_string())
+        })?;
+
+    let mut targets: Vec<(String, String, String)> = Vec::new();
+
+    for (bundle_id, app) in &installed_apps {
+        let name = app
+            .as_dictionary()
+            .and_then(|x| x.get("CFBundleDisplayName").or_else(|| x.get("CFBundleName")))
+            .and_then(|x| x.as_string())
+            .unwrap_or(bundle_id);
+
+        if let Some((_, path)) = PAIRING_APPS.iter().find(|(n, _)| *n == name) {
+            targets.push((name.to_string(), bundle_id.clone(), path.to_string()));
+        } else if let Some(file_sharing) = app
+            .as_dictionary()
+            .and_then(|x| x.get("UIFileSharingEnabled"))
+            .and_then(|x| x.as_boolean())
+        {
+            if file_sharing {
+                targets.push((
+                    name.to_string(),
+                    bundle_id.clone(),
+                    "ALTPairingFile.mobiledevicepairing".to_string(),
+                ));
+            }
+        }
+    }
+
+    if targets.is_empty() {
+        return Err(AppError::HouseArrest(
+            "No compatible apps found on device".into(),
+            "Install SideStore, LiveContainer, Feather, or any app with File Sharing enabled".into(),
+        ));
+    }
+
+    let mut saved_apps = Vec::new();
+    for (name, bundle_id, path) in targets {
+        if place_file(device.pairing.clone(), &provider, bundle_id, path).await.is_ok() {
+            saved_apps.push(name);
+        }
+    }
+
+    if saved_apps.is_empty() {
+        return Err(AppError::HouseArrest(
+            "Failed to save pairing file to device".into(),
+            "Could not access app Documents directory".into(),
+        ));
+    }
+
+    Ok(saved_apps)
+}
+
+pub async fn auto_sync_pairing_to_device(
+    provider: &dyn IdeviceProvider,
+    pairing: &[u8],
+) -> Result<usize, AppError> {
+    let mut installation_proxy = match InstallationProxyClient::connect(provider).await {
+        Ok(client) => client,
+        Err(_) => return Ok(0),
+    };
+
+    let installed_apps = match installation_proxy.get_apps(Some("User"), None).await {
+        Ok(apps) => apps,
+        Err(_) => return Ok(0),
+    };
+
+    let mut count = 0;
+    for (bundle_id, app) in &installed_apps {
+        let name = app
+            .as_dictionary()
+            .and_then(|x| x.get("CFBundleDisplayName").or_else(|| x.get("CFBundleName")))
+            .and_then(|x| x.as_string())
+            .unwrap_or(bundle_id);
+
+        if let Some((_, path)) = PAIRING_APPS.iter().find(|(n, _)| *n == name) {
+            if place_file(pairing.to_vec(), provider, bundle_id.clone(), path.to_string()).await.is_ok() {
+                count += 1;
+            }
+        }
+    }
+
+    if count > 0 {
+        info!("Auto-synced pairing file to {} apps on connected device", count);
+    }
+    Ok(count)
 }
 
 // prompt for a location to save the pairing file, then export it there. This is for advanced users who want to use the pairing file with other tools, or just want a backup of it. Normal users should use the "Place" button next to the app they want to pair with instead, which will transfer the pairing file automatically.

@@ -22,7 +22,7 @@ use crate::{
     },
     pairing::{
         delete_stored_rppairing, export_pairing_cmd, has_stored_rppairing, installed_pairing_apps,
-        place_pairing_cmd,
+        place_pairing_cmd, save_pairing_to_device_cmd,
     },
     secure_storage::{force_disable_keyring, keyring_available},
     sideload::{SideloaderMutex, install_sidestore_operation, sideload_operation},
@@ -119,6 +119,7 @@ pub fn run() {
             delete_app_id,
             installed_pairing_apps,
             place_pairing_cmd,
+            save_pairing_to_device_cmd,
             reset_anisette_state,
             export_pairing_cmd,
             delete_stored_rppairing,

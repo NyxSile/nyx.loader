@@ -201,9 +201,16 @@ export default ({
               <Trans
                 i18nKey="error.support_message"
                 components={{
+                  portal: (
+                    <span
+                      onClick={() => openUrl("https://nyx.sideload.space")}
+                      role="link"
+                      className="error-link"
+                    />
+                  ),
                   discord: (
                     <span
-                      onClick={() => openUrl("https://discord.gg/EA6yVgydBz")}
+                      onClick={() => openUrl("https://nyx.sideload.space")}
                       role="link"
                       className="error-link"
                     />
@@ -211,7 +218,7 @@ export default ({
                   github: (
                     <span
                       onClick={() =>
-                        openUrl("https://github.com/nab138/iloader/issues")
+                        openUrl("https://nyx.sideload.space")
                       }
                       role="link"
                       className="error-link"

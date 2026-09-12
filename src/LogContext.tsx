@@ -36,9 +36,13 @@ export const LogProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!listenerAdded.current) {
       const setupLogger = async () => {
         listenerAdded.current = true;
-        unlistenRef.current = await listen<ExtendedLogRecord>("log-record", (event) => {
-          setLogs((prevLogs) => [...prevLogs, event.payload]);
-        });
+        try {
+          unlistenRef.current = await listen<ExtendedLogRecord>("log-record", (event) => {
+            setLogs((prevLogs) => [...prevLogs, event.payload]);
+          });
+        } catch {
+          // Fallback for browser preview
+        }
       };
 
       setupLogger();
