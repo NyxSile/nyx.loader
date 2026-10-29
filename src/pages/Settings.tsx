@@ -25,7 +25,7 @@ type SettingsProps = {
 let anisetteServers = [
   ["mac-ani.jkcoxson.com", "Jkcoxson"],
   ["ani.iloader.app", "iloader"],
-  ["new.ani.sidestore.io", "SideStore (.io)"],
+  ["mac-ani.jkcoxson.com", "SideStore (.io)"],
   ["ani3.stikstore.app", "StikStore"],
 ];
 export const Settings = ({
@@ -38,7 +38,7 @@ export const Settings = ({
   const { t } = useTranslation();
   const [anisetteServer, setAnisetteServer] = useStore<string>(
     "anisetteServer",
-    "new.ani.sidestore.io",
+    "mac-ani.jkcoxson.com",
   );
 
   const [overrideKeyring, setOverrideKeyring] = useStore<boolean>(

@@ -34,7 +34,7 @@ export const ErrorProvider: React.FC<{ children: React.ReactNode }> = ({
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [anisetteServer] = useStore<string>(
     "anisetteServer",
-    "new.ani.sidestore.io",
+    "mac-ani.jkcoxson.com",
   );
   const { platform } = usePlatform();
 

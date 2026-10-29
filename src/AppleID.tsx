@@ -38,7 +38,7 @@ export const AppleID = ({
   const [addAccountOpen, setAddAccountOpen] = useState<boolean>(false);
   const [anisetteServer] = useStore<string>(
     "anisetteServer",
-    "new.ani.sidestore.io",
+    "mac-ani.jkcoxson.com",
   );
   const [certs, setCerts] = useState<Certificate[] | null>(null);
   const [selectedSerials, setSelectedSerials] = useState<string[]>([]);
