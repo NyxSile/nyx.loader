@@ -199,7 +199,7 @@ async fn login(
                 RemoteV3AnisetteProvider::default()?
                     .set_serial_number("0".to_string())
                     .set_storage(create_sideloading_storage(app)?)
-                    .set_url(&anisette_url),
+                    .set_url(&anisette_server),
             )
             .login(password, Box::new(tfa_closure))
             .await
