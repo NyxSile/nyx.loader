@@ -23,14 +23,10 @@ type SettingsProps = {
 };
 
 let anisetteServers = [
-  ["ani.sidestore.io", "SideStore (.io)"],
-  ["ani.stikstore.app", "StikStore"],
-  ["ani.sidestore.app", "SideStore (.app)"],
-  ["ani.sidestore.zip", "SideStore (.zip)"],
-  ["ani.846969.xyz", "SideStore (.xyz)"],
-  ["ani.neoarz.xyz", "neoarz"],
-  ["ani.xu30.top", "SteX"],
-  ["anisette.wedotstud.io", "WE. Studio"],
+  ["mac-ani.jkcoxson.com", "Jkcoxson"],
+  ["ani.iloader.app", "iloader"],
+  ["new.ani.sidestore.io", "SideStore (.io)"],
+  ["ani3.stikstore.app", "StikStore"],
 ];
 export const Settings = ({
   ensureSelectedDevice,
@@ -42,7 +38,7 @@ export const Settings = ({
   const { t } = useTranslation();
   const [anisetteServer, setAnisetteServer] = useStore<string>(
     "anisetteServer",
-    "ani.sidestore.io",
+    "new.ani.sidestore.io",
   );
 
   const [overrideKeyring, setOverrideKeyring] = useStore<boolean>(

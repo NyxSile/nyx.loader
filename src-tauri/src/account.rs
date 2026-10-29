@@ -188,25 +188,41 @@ async fn login(
         }
     };
 
-    let anisette_url = if !anisette_server.starts_with("http") {
-        format!("https://{}", anisette_server)
-    } else {
-        anisette_server
-    };
-
-    let mut account = AppleAccount::builder(&email.to_lowercase())
-        .anisette_provider(
-            RemoteV3AnisetteProvider::default()?
-                .set_serial_number("0".to_string())
-                .set_storage(create_sideloading_storage(app)?)
-                .set_url(&anisette_url),
-        )
-        .login(password, Box::new(tfa_closure))
-        .await?;
-
-    debug!("Logged in");
+    // Retry login with exponential backoff up to 3 attempts to mitigate temporary anisette server timeouts
+    let mut attempts = 0;
+    let max_attempts = 3;
+    let mut account: Option<AppleAccount> = None;
+    while attempts < max_attempts {
+        attempts += 1;
+        match AppleAccount::builder(&email.to_lowercase())
+            .anisette_provider(
+                RemoteV3AnisetteProvider::default()?
+                    .set_serial_number("0".to_string())
+                    .set_storage(create_sideloading_storage(app)?)
+                    .set_url(&anisette_url),
+            )
+            .login(password, Box::new(tfa_closure))
+            .await
+        {
+            Ok(a) => {
+                account = Some(a);
+                break;
+            }
+            Err(e) => {
+                if attempts >= max_attempts {
+                    return Err(e);
+                }
+                // wait with exponential backoff (1s, 2s)
+                let backoff = std::time::Duration::from_secs(2u64.pow(attempts - 1));
+                tokio::time::sleep(backoff).await;
+            }
+        }
+    }
+    let mut account = account.ok_or_else(|| AppError::Misc("Failed to obtain AppleAccount after retries".into()))?;
+    debug!("Logged in after {} attempt(s)", attempts);
 
     let dev_session = DeveloperSession::from_account(&mut account).await?;
+
 
     debug!("Created developer session");
 

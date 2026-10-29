@@ -184,7 +184,10 @@ pub async fn cancel_pairing(cancel_state: State<'_, PairingCancelToken>) -> Resu
 pub async fn get_usbmuxd() -> Result<UsbmuxdConnection, AppError> {
     UsbmuxdConnection::default()
         .await
-        .map_err(|e| AppError::Usbmuxd("Failed to connect to usbmuxd".into(), e.to_string()))
+        .map_err(|e| {
+            let hint = "Please ensure usbmuxd is installed and running. On macOS, you can install via `brew install usbmuxd`; on Linux, use your package manager (e.g., `apt-get install usbmuxd`).";
+            AppError::Usbmuxd(format!("Failed to connect to usbmuxd. {}", hint).into(), e.to_string())
+        })
 }
 
 pub async fn get_provider(device_info: &DeviceInfo) -> Result<UsbmuxdProvider, AppError> {
