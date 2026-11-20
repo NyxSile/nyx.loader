@@ -16,7 +16,7 @@ import {
 } from "./components/operations";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
-import { LuZap, LuSparkles, LuPackage } from "react-icons/lu";
+import { LuPackage } from "react-icons/lu";
 import OperationView from "./components/OperationView";
 import { toast } from "sonner";
 import { Modal } from "./components/Modal";
@@ -29,7 +29,6 @@ import { checkForUpdates } from "./update";
 import { GlassCard } from "./components/GlassCard";
 import { useTranslation } from "react-i18next";
 import { usePlatform } from "./PlatformContext";
-import { StarsBackground } from "./components/StarsBackground";
 import { useStore } from "./StoreContext";
 
 function App() {
@@ -242,7 +241,6 @@ function App() {
         setIsDraggingOver(false);
       }}
     >
-      {!simpleMode && <StarsBackground />}
       <header className="workspace-header">
         <div className="header-left">
           <div className="title-block">
@@ -255,25 +253,10 @@ function App() {
             </div>
           </div>
           <span className="version-pill">
-            {version || "n1.0.0"}
+            {version || "n1.1.0"}
           </span>
         </div>
         <div className="header-actions">
-          <button
-            className={`toolbar-button simple-mode-btn ${simpleMode ? "active" : ""}`}
-            onClick={() => setSimpleMode((prev) => !prev)}
-            title={t("settings.simple_mode_desc")}
-          >
-            {simpleMode ? (
-              <>
-                <LuZap size={13} className="toolbar-btn-icon" /> Simple: ON
-              </>
-            ) : (
-              <>
-                <LuSparkles size={13} className="toolbar-btn-icon" /> Stars: ON
-              </>
-            )}
-          </button>
           <button
             className="toolbar-button"
             onClick={async () => {
@@ -507,7 +490,7 @@ function App() {
         <div className="drag-drop-overlay">
           <div className="drag-drop-modal">
             <div className="drag-drop-icon">
-              <LuPackage size={44} color="#7b61ff" />
+              <LuPackage size={40} color="var(--accent)" />
             </div>
             <h3>{t("app.drop_ipa_title")}</h3>
             <p>

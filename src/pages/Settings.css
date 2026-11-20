@@ -108,11 +108,11 @@
 }
 
 .nyx-disclaimer-card {
-  margin-top: 1rem;
-  padding: 1rem 1.1rem;
-  border-radius: 12px;
-  background: rgba(123, 97, 255, 0.05);
-  border: 1px solid rgba(123, 97, 255, 0.2);
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
   text-align: left;
 }
 

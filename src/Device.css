@@ -58,15 +58,15 @@
 }
 
 .device-connection-badge.usb {
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  color: #38bdf8;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--ok);
 }
 
 .device-connection-badge.wifi {
-  background: rgba(167, 139, 250, 0.12);
-  border: 1px solid rgba(167, 139, 250, 0.35);
-  color: #a78bfa;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--accent);
 }
 
 .device-sub-row {
@@ -95,15 +95,15 @@
 }
 
 .device-udid-btn:hover {
-  background: rgba(123, 97, 255, 0.2);
-  color: #fff;
-  border-color: rgba(123, 97, 255, 0.5);
+  background: var(--surface3);
+  color: var(--text);
+  border-color: var(--border-hover);
 }
 
 .device-selected-pill {
-  padding: 0.25rem 0.8rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  font-size: 0.9rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--surface3);
+  border: 1px solid var(--border-hover);
+  font-size: 12px;
 }
