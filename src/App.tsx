@@ -16,7 +16,7 @@ import {
 } from "./components/operations";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
-import { LuPackage } from "react-icons/lu";
+import { LuZap, LuPackage } from "react-icons/lu";
 import OperationView from "./components/OperationView";
 import { toast } from "sonner";
 import { Modal } from "./components/Modal";
@@ -29,6 +29,7 @@ import { checkForUpdates } from "./update";
 import { GlassCard } from "./components/GlassCard";
 import { useTranslation } from "react-i18next";
 import { usePlatform } from "./PlatformContext";
+import { StarsBackground } from "./components/StarsBackground";
 import { useStore } from "./StoreContext";
 
 function App() {
@@ -241,6 +242,7 @@ function App() {
         setIsDraggingOver(false);
       }}
     >
+      {!simpleMode && <StarsBackground />}
       <header className="workspace-header">
         <div className="header-left">
           <div className="title-block">
@@ -257,6 +259,19 @@ function App() {
           </span>
         </div>
         <div className="header-actions">
+          <button
+            className={`toolbar-button simple-mode-btn ${simpleMode ? "active" : ""}`}
+            onClick={() => setSimpleMode((prev) => !prev)}
+            title={t("settings.simple_mode_desc")}
+          >
+            {simpleMode ? (
+              <>
+                <LuZap size={13} className="toolbar-btn-icon" /> Simple: ON
+              </>
+            ) : (
+              <>Stars: ON</>
+            )}
+          </button>
           <button
             className="toolbar-button"
             onClick={async () => {
