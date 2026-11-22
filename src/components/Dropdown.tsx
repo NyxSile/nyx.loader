@@ -39,6 +39,7 @@ export const Dropdown = ({
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [flipUp, setFlipUp] = useState(false);
+  const [customActive, setCustomActive] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
   const customInputRef = useRef<HTMLInputElement | null>(null);
@@ -50,8 +51,8 @@ export const Dropdown = ({
 
   const isCustom = useMemo(() => {
     if (!allowCustom) return false;
-    return options.every((option) => option.value !== value);
-  }, [allowCustom, options, value]);
+    return customActive || options.every((option) => option.value !== value);
+  }, [allowCustom, customActive, options, value]);
 
   useEffect(() => {
     if (!open || !toggleRef.current) return;
@@ -97,14 +98,14 @@ export const Dropdown = ({
 
   const activateCustom = () => {
     setOpen(false);
+    setCustomActive(true);
     const nextValue = lastCustomValueRef.current || defaultCustomValue;
-    if (nextValue) {
-      onChange(nextValue);
-    }
+    onChange(nextValue);
   };
 
   const deactivateCustom = () => {
     setOpen(false);
+    setCustomActive(false);
     if (options.length > 0) {
       onChange(options[0].value);
     }
@@ -178,6 +179,7 @@ export const Dropdown = ({
                       if (option.value === customValueKey) {
                         activateCustom();
                       } else {
+                        setCustomActive(false);
                         onChange(option.value);
                         setOpen(false);
                       }
